@@ -2,12 +2,12 @@ USE employees;
 
 # write a query that shows each department along with the name of the current manager for that department.
 
-SELECT d.dept_name, CONCAT_WS(' ', e.first_name, e.last_name) AS manager
+SELECT dept_name, CONCAT_WS(' ', e.first_name, e.last_name) AS manager
     FROM departments d
     JOIN dept_manager dm ON d.dept_no = dm.dept_no
     JOIN employees e ON dm.emp_no = e.emp_no
-    WHERE dm.to_date > NOW()
-    ORDER BY d.dept_name;
+    WHERE to_date > NOW()
+    ORDER BY dept_name;
 
 # Find the name of all departments currently managed by women.
 
@@ -21,24 +21,21 @@ SELECT d.dept_name, CONCAT_WS(' ', e.first_name, e.last_name) AS female_manager
 
 # List all the titles in the customer service dept and count how many current employees have that title.
 
-SELECT t.title, COUNT(*) AS num_employees
-    FROM employees e
-    JOIN dept_emp de ON e.emp_no = de.emp_no
+SELECT title, COUNT(title) AS Total FROM titles t
+    JOIN dept_emp de ON t.emp_no = de.emp_no
     JOIN departments d ON de.dept_no = d.dept_no
-    JOIN titles t ON e.emp_no = t.emp_no
-    WHERE d.dept_name = 'Customer Service'
+WHERE d.dept_name = 'Customer Service'
     AND de.to_date > NOW()
     AND t.to_date > NOW()
-    GROUP BY t.title
+    GROUP BY title;
 
 # Find the current salary of all current managers.
 
-SELECT d.dept_name, CONCAT_WS(' ', e.first_name, e.last_name) AS manager, s.salary
-    FROM departments d
-        JOIN dept_manager dm ON d.dept_no = dm.dept_no
-        JOIN employees e ON dm.emp_no = e.emp_no
-        JOIN salaries s ON e.emp_no = s.emp_no
-    WHERE dm.to_date > NOW()
+SELECT d.dept_name, CONCAT_WS(' ', e.first_name, e.last_name) AS manager, s.salary FROM departments d
+    JOIN dept_manager dm ON d.dept_no = dm.dept_no
+    JOIN employees e ON dm.emp_no = e.emp_no
+    JOIN salaries s ON e.emp_no = s.emp_no
+WHERE dm.to_date > NOW()
     AND s.to_date > NOW()
     ORDER BY d.dept_name;
 
@@ -53,4 +50,3 @@ SELECT CONCAT_WS(' ', e.first_name, e.last_name) AS employee_name, d.dept_name, 
     WHERE de.to_date > NOW()
     AND dm.to_date > NOW();
 
-# Find
